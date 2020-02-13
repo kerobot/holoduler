@@ -1,6 +1,6 @@
 # ホロジューラー
 
-[ホロジュール](https://schedule.hololive.tv/)のホロライブスケジュールを取得します。
+[ホロジュール](https://schedule.hololive.tv/)のホロライブスケジュールとYoutubeの動画情報を取得します。
 
 ## 環境
 
@@ -10,16 +10,20 @@
 * Visual Studio Code x64
 * Git for Windows x64
 
-## 手順1
+## プロジェクトディレクトリの作成
 
 ```powershell
-> mkdir holodule
-> cd holodule
+> mkdir holoduler
+> cd holoduler
 ```
+
+## git 初期化
 
 ```powershell
 > git init
 ```
+
+## Python 仮想環境の構築
 
 ```powershell
 > python -V
@@ -34,21 +38,33 @@ Python 3.7.4
 Python 3.7.4
 ```
 
-[geckodriver](https://github.com/mozilla/geckodriver/releases)(geckodriver-v0.26.0-win64.zip)をダウンロードする。
+## Webスクレイピングのための geckodriver のダウンロード
 
-geckodriver-v0.26.0-win64.zipを解凍し、geckodriver.exeをプロジェクトルートに配置する。
+* [geckodriver](https://github.com/mozilla/geckodriver/releases)(geckodriver-v0.26.0-win64.zip)をダウンロードする。
+* geckodriver-v0.26.0-win64.zipを解凍し、geckodriver.exeをプロジェクトルートに配置する。
 
-vscode .
+## Youtube 動画情報取得のための Youtube Data API の有効化
 
-.gitignore
+* Google Developer Console にログイン
+* ダッシュボードでプロジェクトを作成
+* ライブラリで Youtube Data API v3 を有効化
+* 認証情報で認証情報を作成して APIキー を取得
+
+## .env の作成
+
+* .envファイルを作成する
+* .env.sampleを参考にURLやAPIキーを設定する
+
+## .gitignore の作成
 
 ```text
 /venv/
 /geckodriver.log
 /geckodriver.exe
+.env
 ```
 
-requirements.txt
+## requirements.txt の作成
 
 ```text
 pylint
@@ -58,15 +74,16 @@ selenium
 urllib3
 lxml
 google-api-python-client
+python-dotenv
 ```
+
+## requirements.txt を利用して pip インストール
 
 ```powershell
 (venv) > pip install -r .\requirements.txt
 ```
 
-## デバッグ
-
-launch.json
+## launch.json を作成してデバッグ実行
 
 ```json
 {

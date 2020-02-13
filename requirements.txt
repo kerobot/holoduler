@@ -5,3 +5,4 @@ selenium
 urllib3
 lxml
 google-api-python-client
+python-dotenv

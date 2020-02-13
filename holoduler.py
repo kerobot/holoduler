@@ -1,10 +1,13 @@
 """
 【ホロライブ】ホロジュールと Youtube の動画情報を取得してCSV出力する
+YouTube Data API v3 のクォータが標準のままだと、制限の上限にすぐに到達してエラーとなる
 
 1. 事前に geckodriver をダウンロードして配置し PATH を設定しておく
    geckodriver https://github.com/mozilla/geckodriver/releases
 2. Google の YouTube Data API v3 を有効化して API キーを取得しておく
    Google Developer Console https://console.developers.google.com/?hl=JA
+3. .envファイルを作成し、URLやAPIキーを設定しておく
+   参考 : .env.sample 
 """
 
 import sys
@@ -15,6 +18,7 @@ import time
 import datetime
 import argparse
 import urllib.request
+import settings
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -27,26 +31,26 @@ from apiclient.errors import HttpError
 
 RETURN_SUCCESS = 0
 RETURN_FAILURE = -1
-HOLODULE_URL = "https://schedule.hololive.tv/"
-API_KEY = "****"
-API_SERVICE_NAME = "youtube"
-API_VERSION = "v3"
 
 class Holodule:
-    name = ""
+    # 日時
     datetime = None
-    url = ""
+    # 名前
+    name = ""
+    # タイトル（Youtubeから取得）
     title = ""
-    video_id = ""
+    # URL
+    url = ""
+    # 説明（Youtubeから取得）
     description = ""
 
 class HoloduleDownloader:
-    def __init__(self, url, dirpath, apikey):
+    def __init__(self, holodule_url, dirpath, api_key, api_service_name, api_version):
         self.__driver = None
         self.__wait = None
-        self.__url = url
+        self.__holodule_url = holodule_url
         self.__dirpath = dirpath
-        self.__youtube = build(API_SERVICE_NAME, API_VERSION, developerKey=apikey)
+        self.__youtube = build(api_service_name, api_version, developerKey=api_key)
 
     def __setup_profile(self):
         # Firefoxプロファイルの設定
@@ -78,7 +82,7 @@ class HoloduleDownloader:
 
     def __get_holodule(self):
         # URLに遷移
-        self.__driver.get(self.__url)
+        self.__driver.get(self.__holodule_url)
         # <div class="holodule" style="margin-top:10px;">が表示されるまで待機する
         self.__wait.until(EC.presence_of_element_located((By.CLASS_NAME, "holodule")))
         # ページソースの取得
@@ -164,10 +168,8 @@ class HoloduleDownloader:
                 title = search_result["snippet"]["title"]
                 # 説明
                 description = search_result["snippet"]["description"]
-                # VideoId
-                videoId = search_result["id"]["videoId"]
-                return (title, description, videoId)
-        return ("","","")
+                return (title, description)
+        return ("","")
 
     def get_holodule_list(self):
         try:
@@ -183,10 +185,10 @@ class HoloduleDownloader:
             holodule_list = self.__get_holodule()
             # Youtube情報の取得
             for holodule in holodule_list:
+                # TODO : ループして1件ずつ API を呼び出すのは見直すべき
                 video_info = self.__get_youtube_video_info(holodule.url)
                 holodule.title = video_info[0]
-                holodule.description = video_info[1][:20] # 20文字で切る
-                holodule.video_id = video_info[2]
+                holodule.description = video_info[1][:20] # 長すぎるので20文字で切る
             # 生成したリストを返す
             return holodule_list
         except OSError as err:
@@ -216,36 +218,36 @@ def main():
 
     # ファイルパス
     filepath = args.filepath
-
     # ディレクトリパス
     dirpath = os.path.dirname(filepath)
     print(f"出力ディレクトリパス : {dirpath}")
     if os.path.exists(dirpath) == False:
         print("エラー : 出力するCSVファイルのディレクトリパスが存在しません。")
         return RETURN_FAILURE
-
     # ファイル名
     filename = os.path.basename(filepath)
     print(f"出力ファイル名 : {filename}")
-
     # URL
-    url = HOLODULE_URL
-    print(f"ホロジュールURL : {url}")
-    if check_url(url) == False:
+    holodule_url = settings.HOLODULE_URL
+    print(f"ホロジュールURL : {holodule_url}")
+    if check_url(holodule_url) == False:
         print("エラー : 設定されているURLにアクセスできません。")
         return RETURN_FAILURE
+    # API設定
+    api_key = settings.API_KEY
+    api_service_name = settings.API_SERVICE_NAME
+    api_version = settings.API_VERSION
 
     try:
         # ホロジュールの取得
-        hddl = HoloduleDownloader(url, dirpath, API_KEY)
+        hddl = HoloduleDownloader(holodule_url, dirpath, api_key, api_service_name, api_version)
         hdlist = hddl.get_holodule_list()
         # CSV出力
-        with open(filepath, "wb") as csvfile:
-            fieldnames = ("日時", "名前", "タイトル", "URL", "抜粋説明")
-            csvwriter = csv.writer(csvfile, delimiter=",", fieldnames=fieldnames)
+        with open(filepath, "w", newline="") as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=",")
+            csvwriter.writerow(["日時", "名前", "タイトル", "URL", "抜粋説明"])
             for hd in hdlist:
-                csvwriter.writerow(hd.datetime, hd.name, hd.title, hd.url, hd.description)
-
+                csvwriter.writerow([hd.datetime, hd.name, hd.title, hd.url, hd.description])
         return RETURN_SUCCESS
     except:
         info = sys.exc_info()
