@@ -243,7 +243,7 @@ def main():
         hddl = HoloduleDownloader(holodule_url, dirpath, api_key, api_service_name, api_version)
         hdlist = hddl.get_holodule_list()
         # CSV出力
-        with open(filepath, "w", newline="") as csvfile:
+        with open(filepath, "w", newline="", encoding="utf_8_sig") as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=",")
             csvwriter.writerow(["日時", "名前", "タイトル", "URL", "抜粋説明"])
             for hd in hdlist:
