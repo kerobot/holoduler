@@ -1,0 +1,256 @@
+"""
+【ホロライブ】ホロジュールと Youtube の動画情報を取得してCSV出力する
+
+1. 事前に geckodriver をダウンロードして配置し PATH を設定しておく
+   geckodriver https://github.com/mozilla/geckodriver/releases
+2. Google の YouTube Data API v3 を有効化して API キーを取得しておく
+   Google Developer Console https://console.developers.google.com/?hl=JA
+"""
+
+import sys
+import os
+import re
+import csv
+import time
+import datetime
+import argparse
+import urllib.request
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from apiclient.discovery import build
+from apiclient.errors import HttpError
+
+RETURN_SUCCESS = 0
+RETURN_FAILURE = -1
+HOLODULE_URL = "https://schedule.hololive.tv/"
+API_KEY = "****"
+API_SERVICE_NAME = "youtube"
+API_VERSION = "v3"
+
+class Holodule:
+    name = ""
+    datetime = None
+    url = ""
+    title = ""
+    video_id = ""
+    description = ""
+
+class HoloduleDownloader:
+    def __init__(self, url, dirpath, apikey):
+        self.__driver = None
+        self.__wait = None
+        self.__url = url
+        self.__dirpath = dirpath
+        self.__youtube = build(API_SERVICE_NAME, API_VERSION, developerKey=apikey)
+
+    def __setup_profile(self):
+        # Firefoxプロファイルの設定
+        profile = webdriver.FirefoxProfile()
+        # 0:デスクトップ、1:システム規定フォルダ、2:ユーザ定義フォルダ
+        profile.set_preference("browser.download.folderList", 2)
+        # 上記で2を選択したのでファイルのダウンロード場所を指定
+        profile.set_preference("browser.download.dir", self.__dirpath)
+        # ダウンロード完了時にダウンロードマネージャウィンドウを表示するかを示す真偽値
+        profile.set_preference("browser.download.manager.showWhenStarting", False)
+        # MIMEタイプを設定（これが実態と一致していないとダイアログが表示されてしまう）
+        profile.set_preference("browser.helperApps.neverAsk.saveToDisk",
+                               "application/octet-stream-dummy")
+        # その他（参考）
+        # profile.set_preference("browser.helperApps.alwaysAsk.force", False)
+        # profile.set_preference("browser.download.manager.alertOnEXEOpen", False)
+        # profile.set_preference("browser.download.manager.focusWhenStarting", False)
+        # profile.set_preference("browser.download.manager.useWindow", False)
+        # profile.set_preference("browser.download.manager.showAlertOnComplete", False)
+        # profile.set_preference("browser.download.manager.closeWhenDone", False)
+        return profile
+
+    def __setup_options(self):
+        # Firefoxオプションの設定
+        options = Options()
+        # ヘッドレスモードとする
+        options.add_argument("--headless")
+        return options
+
+    def __get_holodule(self):
+        # URLに遷移
+        self.__driver.get(self.__url)
+        # <div class="holodule" style="margin-top:10px;">が表示されるまで待機する
+        self.__wait.until(EC.presence_of_element_located((By.CLASS_NAME, "holodule")))
+        # ページソースの取得
+        html = self.__driver.page_source.encode('utf-8')
+        # ページソースの解析
+        soup = BeautifulSoup(html, "lxml")
+        # タイトルの取得（確認用）
+        body = soup.find("body")
+        title = body.find("title").text
+        print(title)
+        # スケジュールの取得（ここからはページの構成に合わせて決め打ち = ページ構成が変わったら動かない）
+        holodule_list = []
+        date_string = ""
+        today = datetime.date.today()
+        tab_pane = soup.find('div', class_="tab-pane show active")
+        containers = tab_pane.find_all('div', class_="container")
+        for container in containers:
+            # 日付のみ取得
+            div_date = container.find('div', class_="holodule navbar-text")
+            if div_date is not None:
+                date_text = div_date.text.strip()
+                match_date = re.search(r'[0-9]{1,2}/[0-9]{1,2}', date_text)
+                dates = match_date.group(0).split("/")
+                month = int(dates[0])
+                day = int(dates[1])
+                year = today.year
+                if month < today.month or ( month == 12 and today.month == 1 ):
+                    year = year - 1
+                elif month > today.month or ( month == 1 and today.month == 12 ):
+                    year = year + 1
+                date_string = f"{year}/{month}/{day}"
+                # print(date_string)
+            # ライバー毎のスケジュール
+            thumbnails = container.find_all('a', class_="thumbnail")
+            if thumbnails is not None:
+                for thumbnail in thumbnails:
+                    holodule = Holodule()
+                    # Youtube URL
+                    youtube_url = thumbnail.get("href")
+                    if youtube_url is not None:
+                        holodule.url = youtube_url
+                        # print(holodule.url)
+                    # 時刻（先に取得しておいた日付と合体）
+                    div_time = thumbnail.find('div', class_="col-5 col-sm-5 col-md-5 text-left datetime")
+                    if div_time is not None:
+                        time_text = div_time.text.strip()
+                        match_time = re.search(r'[0-9]{1,2}:[0-9]{1,2}', time_text)
+                        times = match_time.group(0).split(":")
+                        hour = int(times[0])
+                        minute = int(times[1])
+                        datetime_string = f"{date_string} {hour}:{minute}"
+                        holodule.datetime = datetime.datetime.strptime(datetime_string, "%Y/%m/%d %H:%M")
+                        # print(holodule.datetime)
+                    # ライバーの名前
+                    div_name = thumbnail.find('div', class_="col text-right name")
+                    if div_name is not None:
+                        holodule.name = div_name.text.strip()
+                        # print(holodule.name)
+                    # リストに追加
+                    holodule_list.append(holodule)
+        return holodule_list
+
+    def __get_youtube_video_info(self, youtube_url):
+        # Youtube の URL から ID を取得
+        match_video = re.search(r'^[^v]+v=(.{11}).*', youtube_url)
+        video_id = match_video.group(1)
+        # Youtube はスクレイピングを禁止しているので YouTube Data API (v3) で情報を取得
+        search_response = self.__youtube.search().list(
+            # ID を検索条件とする
+            q=video_id,
+            # 結果として id と snippet を取得
+            part="id,snippet",
+            # 対象を video 限定とする
+            type="video",
+            # 1件のみ取得
+            maxResults=1
+        ).execute()
+        # 検索結果から情報を取得
+        for search_result in search_response.get("items", []):
+            # Videoのみに限定（Video以外になることは無い）
+            if search_result["id"]["kind"] == "youtube#video":
+                # タイトル
+                title = search_result["snippet"]["title"]
+                # 説明
+                description = search_result["snippet"]["description"]
+                # VideoId
+                videoId = search_result["id"]["videoId"]
+                return (title, description, videoId)
+        return ("","","")
+
+    def get_holodule_list(self):
+        try:
+            # プロファイルのセットアップ
+            profile = self.__setup_profile()
+            # オプションのセットアップ
+            options = self.__setup_options()
+            # ドライバの初期化（オプション（ヘッドレスモード）とプロファイルを指定）
+            self.__driver = webdriver.Firefox(options=options, firefox_profile=profile)
+            # 指定したドライバに対して最大で10秒間待つように設定する
+            self.__wait = WebDriverWait(self.__driver, 10)
+            # ホロジュールの取得
+            holodule_list = self.__get_holodule()
+            # Youtube情報の取得
+            for holodule in holodule_list:
+                video_info = self.__get_youtube_video_info(holodule.url)
+                holodule.title = video_info[0]
+                holodule.description = video_info[1][:20] # 20文字で切る
+                holodule.video_id = video_info[2]
+            # 生成したリストを返す
+            return holodule_list
+        except OSError as err:
+            print("OS error: {0}".format(err))
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            raise
+        finally:
+            # ブラウザを閉じる
+            self.__driver.close()
+            # ドライバ終了
+            # self.__driver.quit()
+
+def check_url(url):
+    try:
+        # 指定したURLにアクセスできるかをチェック
+        with urllib.request.urlopen(url) as response:
+            return True
+    except urllib.request.HTTPError:
+        return False
+
+def main():
+    # パラメータの解析
+    parser = argparse.ArgumentParser(description="ホロジュールのHTMLをSelenium + BeautifulSoup4 + Youtube API で解析してCSV出力")
+    parser.add_argument("filepath", help="出力するCSVファイルのパス")
+    args = parser.parse_args()
+
+    # ファイルパス
+    filepath = args.filepath
+
+    # ディレクトリパス
+    dirpath = os.path.dirname(filepath)
+    print(f"出力ディレクトリパス : {dirpath}")
+    if os.path.exists(dirpath) == False:
+        print("エラー : 出力するCSVファイルのディレクトリパスが存在しません。")
+        return RETURN_FAILURE
+
+    # ファイル名
+    filename = os.path.basename(filepath)
+    print(f"出力ファイル名 : {filename}")
+
+    # URL
+    url = HOLODULE_URL
+    print(f"ホロジュールURL : {url}")
+    if check_url(url) == False:
+        print("エラー : 設定されているURLにアクセスできません。")
+        return RETURN_FAILURE
+
+    try:
+        # ホロジュールの取得
+        hddl = HoloduleDownloader(url, dirpath, API_KEY)
+        hdlist = hddl.get_holodule_list()
+        # CSV出力
+        with open(filepath, "wb") as csvfile:
+            fieldnames = ("日時", "名前", "タイトル", "URL", "抜粋説明")
+            csvwriter = csv.writer(csvfile, delimiter=",", fieldnames=fieldnames)
+            for hd in hdlist:
+                csvwriter.writerow(hd.datetime, hd.name, hd.title, hd.url, hd.description)
+
+        return RETURN_SUCCESS
+    except:
+        info = sys.exc_info()
+        print(info[1])
+        return RETURN_FAILURE
+
+if __name__ == "__main__":
+    sys.exit(main())

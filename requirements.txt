@@ -1,0 +1,7 @@
+pylint
+beautifulsoup4
+requests
+selenium
+urllib3
+lxml
+google-api-python-client
