@@ -55,6 +55,7 @@ class HoloduleDownloader:
     def __setup_profile(self):
         # Firefoxプロファイルの設定
         profile = webdriver.FirefoxProfile()
+        # TODO : ファイルのダウンロードを想定していた際の設定を残している
         # 0:デスクトップ、1:システム規定フォルダ、2:ユーザ定義フォルダ
         profile.set_preference("browser.download.folderList", 2)
         # 上記で2を選択したのでファイルのダウンロード場所を指定
@@ -93,7 +94,8 @@ class HoloduleDownloader:
         body = soup.find("body")
         title = body.find("title").text
         print(title)
-        # スケジュールの取得（ここからはページの構成に合わせて決め打ち = ページ構成が変わったら動かない）
+        # TODO : ここからはページの構成に合わせて決め打ち = ページの構成が変わったら動かない
+        # スケジュールの取得
         holodule_list = []
         date_string = ""
         today = datetime.date.today()
@@ -150,25 +152,21 @@ class HoloduleDownloader:
         match_video = re.search(r'^[^v]+v=(.{11}).*', youtube_url)
         video_id = match_video.group(1)
         # Youtube はスクレイピングを禁止しているので YouTube Data API (v3) で情報を取得
-        search_response = self.__youtube.search().list(
-            # ID を検索条件とする
-            q=video_id,
-            # 結果として id と snippet を取得
-            part="id,snippet",
-            # 対象を video 限定とする
-            type="video",
+        search_response = self.__youtube.videos().list(
+            # 結果として snippet のみを取得
+            part="snippet",
+            # 検索条件は id
+            id=video_id,
             # 1件のみ取得
             maxResults=1
         ).execute()
         # 検索結果から情報を取得
         for search_result in search_response.get("items", []):
-            # Videoのみに限定（Video以外になることは無い）
-            if search_result["id"]["kind"] == "youtube#video":
-                # タイトル
-                title = search_result["snippet"]["title"]
-                # 説明
-                description = search_result["snippet"]["description"]
-                return (title, description)
+            # タイトル
+            title = search_result["snippet"]["title"]
+            # 説明
+            description = search_result["snippet"]["description"]
+            return (title, description)
         return ("","")
 
     def get_holodule_list(self):
@@ -185,10 +183,11 @@ class HoloduleDownloader:
             holodule_list = self.__get_holodule()
             # Youtube情報の取得
             for holodule in holodule_list:
-                # TODO : ループして1件ずつ API を呼び出すのは見直すべき
+                # TODO : ループして1件ずつ API を呼び出すのは見直すべきかも（クォータ制限に関連）
                 video_info = self.__get_youtube_video_info(holodule.url)
                 holodule.title = video_info[0]
-                holodule.description = video_info[1][:20] # 長すぎるので20文字で切る
+                # TODO : 説明文を20文字でばっさり切っている
+                holodule.description = video_info[1][:20]
             # 生成したリストを返す
             return holodule_list
         except OSError as err:
