@@ -7,7 +7,9 @@ YouTube Data API v3 のクォータが標準のままだと、制限の上限に
 2. Google の YouTube Data API v3 を有効化して API キーを取得しておく
    Google Developer Console https://console.developers.google.com/?hl=JA
 3. .envファイルを作成し、URLやAPIキーを設定しておく
-   参考 : .env.sample 
+   参考 : .env.sample
+4. requirements.txt を利用して Python のパッケージを一括インストールしておく
+   参考 : requirements.txt
 """
 
 import sys
@@ -50,6 +52,7 @@ class HoloduleDownloader:
         self.__wait = None
         self.__holodule_url = holodule_url
         self.__dirpath = dirpath
+        # YouTube Data API v3 を利用するための準備
         self.__youtube = build(api_service_name, api_version, developerKey=api_key)
 
     def __setup_profile(self):
@@ -82,13 +85,13 @@ class HoloduleDownloader:
         return options
 
     def __get_holodule(self):
-        # URLに遷移
+        # 取得対象の URL に遷移
         self.__driver.get(self.__holodule_url)
         # <div class="holodule" style="margin-top:10px;">が表示されるまで待機する
         self.__wait.until(EC.presence_of_element_located((By.CLASS_NAME, "holodule")))
         # ページソースの取得
         html = self.__driver.page_source.encode('utf-8')
-        # ページソースの解析
+        # ページソースの解析（パーサとして lxml を指定）
         soup = BeautifulSoup(html, "lxml")
         # タイトルの取得（確認用）
         body = soup.find("body")
@@ -166,6 +169,7 @@ class HoloduleDownloader:
             title = search_result["snippet"]["title"]
             # 説明
             description = search_result["snippet"]["description"]
+            # タイトルと説明を返却
             return (title, description)
         return ("","")
 
@@ -186,7 +190,7 @@ class HoloduleDownloader:
                 # TODO : ループして1件ずつ API を呼び出すのは見直すべきかも（クォータ制限に関連）
                 video_info = self.__get_youtube_video_info(holodule.url)
                 holodule.title = video_info[0]
-                # TODO : 説明文を20文字でばっさり切っている
+                # TODO : 説明文が長いので20文字でばっさり切っている
                 holodule.description = video_info[1][:20]
             # 生成したリストを返す
             return holodule_list
@@ -196,10 +200,8 @@ class HoloduleDownloader:
             print("Unexpected error:", sys.exc_info()[0])
             raise
         finally:
-            # ブラウザを閉じる
+            # ドライバを閉じる
             self.__driver.close()
-            # ドライバ終了
-            # self.__driver.quit()
 
 def check_url(url):
     try:
@@ -210,29 +212,31 @@ def check_url(url):
         return False
 
 def main():
-    # パラメータの解析
+    # parser を作る（説明を指定できる）
     parser = argparse.ArgumentParser(description="ホロジュールのHTMLをSelenium + BeautifulSoup4 + Youtube API で解析してCSV出力")
+    # コマンドライン引数を設定する（説明を指定できる）
     parser.add_argument("filepath", help="出力するCSVファイルのパス")
+    # コマンドライン引数を解析する
     args = parser.parse_args()
 
-    # ファイルパス
+    # ファイルパスの取得
     filepath = args.filepath
-    # ディレクトリパス
+    # ディレクトリパスの取得と存在確認
     dirpath = os.path.dirname(filepath)
     print(f"出力ディレクトリパス : {dirpath}")
     if os.path.exists(dirpath) == False:
         print("エラー : 出力するCSVファイルのディレクトリパスが存在しません。")
         return RETURN_FAILURE
-    # ファイル名
+    # ファイル名の取得
     filename = os.path.basename(filepath)
     print(f"出力ファイル名 : {filename}")
-    # URL
+    # URLの取得とアクセス確認（parser から取得）
     holodule_url = settings.HOLODULE_URL
     print(f"ホロジュールURL : {holodule_url}")
     if check_url(holodule_url) == False:
         print("エラー : 設定されているURLにアクセスできません。")
         return RETURN_FAILURE
-    # API設定
+    # Youtube Data API v3 の API設定（parser から取得）
     api_key = settings.API_KEY
     api_service_name = settings.API_SERVICE_NAME
     api_version = settings.API_VERSION
@@ -241,7 +245,7 @@ def main():
         # ホロジュールの取得
         hddl = HoloduleDownloader(holodule_url, dirpath, api_key, api_service_name, api_version)
         hdlist = hddl.get_holodule_list()
-        # CSV出力
+        # CSV出力(BOM付きUTF-8)
         with open(filepath, "w", newline="", encoding="utf_8_sig") as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=",")
             csvwriter.writerow(["日時", "名前", "タイトル", "URL", "抜粋説明"])
