@@ -35,6 +35,36 @@ RETURN_SUCCESS = 0
 RETURN_FAILURE = -1
 
 class Holodule:
+    codes = {
+        "ときのそら"  : "HL0001",
+        "ロボ子さん" : "HL0002",
+        "さくらみこ" : "HL0003",
+        "星街すいせい" : "HL0004",
+        "夜空メル" : "HL0101",
+        "アキ・ローゼンタール" : "HL0102",
+        "赤井はあと" : "HL0103",
+        "白上フブキ" : "HL0104",
+        "夏色まつり" : "HL0105",
+        "湊あくあ" : "HL0201",
+        "紫咲シオン" : "HL0202",
+        "百鬼あやめ" : "HL0203",
+        "癒月ちょこ" : "HL0204",
+        "大空スバル" : "HL0205",
+        "大神ミオ" : "HL0G02",
+        "猫又おかゆ" : "HL0G03",
+        "戌神ころね" : "HL0G04",
+        "兎田ぺこら" : "HL0301",
+        "潤羽るしあ" : "HL0302",
+        "不知火フレア" : "HL0303",
+        "白銀ノエル" : "HL0304",
+        "宝鐘マリン" : "HL0305",
+        "天音かなた" : "HL0401",
+        "桐生ココ" : "HL0402",
+        "角巻わため" : "HL0403",
+        "常闇トワ" : "HL0404",
+        "姫森ルーナ" : "HL0405",
+    }
+
     # 日時
     datetime = None
     # 名前
@@ -45,6 +75,12 @@ class Holodule:
     url = ""
     # 説明（Youtubeから取得）
     description = ""
+    # キー
+    @property
+    def key(self):
+        _code = Holodule.codes[self.name] if self.name in Holodule.codes else ""
+        _dttm = self.datetime.strftime("%Y%m%d_%H%M%S") if self.datetime is not None else ""
+        return _code + "_" + _dttm if ( len(_code) > 0 and len(_dttm) > 0 ) else ""
 
 class HoloduleDownloader:
     def __init__(self, holodule_url, dirpath, api_key, api_service_name, api_version):
@@ -90,7 +126,7 @@ class HoloduleDownloader:
         # <div class="holodule" style="margin-top:10px;">が表示されるまで待機する
         self.__wait.until(EC.presence_of_element_located((By.CLASS_NAME, "holodule")))
         # ページソースの取得
-        html = self.__driver.page_source.encode('utf-8')
+        html = self.__driver.page_source.encode("utf-8")
         # ページソースの解析（パーサとして lxml を指定）
         soup = BeautifulSoup(html, "lxml")
         # タイトルの取得（確認用）
@@ -102,14 +138,14 @@ class HoloduleDownloader:
         holodule_list = []
         date_string = ""
         today = datetime.date.today()
-        tab_pane = soup.find('div', class_="tab-pane show active")
-        containers = tab_pane.find_all('div', class_="container")
+        tab_pane = soup.find("div", class_="tab-pane show active")
+        containers = tab_pane.find_all("div", class_="container")
         for container in containers:
             # 日付のみ取得
-            div_date = container.find('div', class_="holodule navbar-text")
+            div_date = container.find("div", class_="holodule navbar-text")
             if div_date is not None:
                 date_text = div_date.text.strip()
-                match_date = re.search(r'[0-9]{1,2}/[0-9]{1,2}', date_text)
+                match_date = re.search(r"[0-9]{1,2}/[0-9]{1,2}", date_text)
                 dates = match_date.group(0).split("/")
                 month = int(dates[0])
                 day = int(dates[1])
@@ -121,7 +157,7 @@ class HoloduleDownloader:
                 date_string = f"{year}/{month}/{day}"
                 # print(date_string)
             # ライバー毎のスケジュール
-            thumbnails = container.find_all('a', class_="thumbnail")
+            thumbnails = container.find_all("a", class_="thumbnail")
             if thumbnails is not None:
                 for thumbnail in thumbnails:
                     holodule = Holodule()
@@ -131,10 +167,10 @@ class HoloduleDownloader:
                         holodule.url = youtube_url
                         # print(holodule.url)
                     # 時刻（先に取得しておいた日付と合体）
-                    div_time = thumbnail.find('div', class_="col-5 col-sm-5 col-md-5 text-left datetime")
+                    div_time = thumbnail.find("div", class_="col-5 col-sm-5 col-md-5 text-left datetime")
                     if div_time is not None:
                         time_text = div_time.text.strip()
-                        match_time = re.search(r'[0-9]{1,2}:[0-9]{1,2}', time_text)
+                        match_time = re.search(r"[0-9]{1,2}:[0-9]{1,2}", time_text)
                         times = match_time.group(0).split(":")
                         hour = int(times[0])
                         minute = int(times[1])
@@ -142,17 +178,18 @@ class HoloduleDownloader:
                         holodule.datetime = datetime.datetime.strptime(datetime_string, "%Y/%m/%d %H:%M")
                         # print(holodule.datetime)
                     # ライバーの名前
-                    div_name = thumbnail.find('div', class_="col text-right name")
+                    div_name = thumbnail.find("div", class_="col text-right name")
                     if div_name is not None:
                         holodule.name = div_name.text.strip()
                         # print(holodule.name)
                     # リストに追加
-                    holodule_list.append(holodule)
+                    if len(holodule.key) > 0:
+                        holodule_list.append(holodule)
         return holodule_list
 
     def __get_youtube_video_info(self, youtube_url):
         # Youtube の URL から ID を取得
-        match_video = re.search(r'^[^v]+v=(.{11}).*', youtube_url)
+        match_video = re.search(r"^[^v]+v=(.{11}).*", youtube_url)
         video_id = match_video.group(1)
         # Youtube はスクレイピングを禁止しているので YouTube Data API (v3) で情報を取得
         search_response = self.__youtube.videos().list(
@@ -190,8 +227,8 @@ class HoloduleDownloader:
                 # TODO : ループして1件ずつ API を呼び出すのは見直すべきかも（クォータ制限に関連）
                 video_info = self.__get_youtube_video_info(holodule.url)
                 holodule.title = video_info[0]
-                # TODO : 説明文が長いので20文字でばっさり切っている
-                holodule.description = video_info[1][:20]
+                # TODO : 説明文が長いので50文字でばっさり切っている
+                holodule.description = video_info[1].replace("\r","").replace("\n","").replace("\"","").replace("\'","")[:50]
             # 生成したリストを返す
             return holodule_list
         except OSError as err:
@@ -248,9 +285,9 @@ def main():
         # CSV出力(BOM付きUTF-8)
         with open(filepath, "w", newline="", encoding="utf_8_sig") as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=",")
-            csvwriter.writerow(["日時", "名前", "タイトル", "URL", "抜粋説明"])
+            csvwriter.writerow(["key", "datetime", "name", "title", "url", "description"])
             for hd in hdlist:
-                csvwriter.writerow([hd.datetime, hd.name, hd.title, hd.url, hd.description])
+                csvwriter.writerow([hd.key, hd.datetime, hd.name, hd.title, hd.url, hd.description])
         return RETURN_SUCCESS
     except:
         info = sys.exc_info()
