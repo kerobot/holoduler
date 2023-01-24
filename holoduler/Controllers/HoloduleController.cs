@@ -20,6 +20,8 @@ namespace holoduler.Controllers
         [HttpGet("{date}")]
         public async Task<string?> Get(string date)
         {
+            _logger.LogInformation($"request holodules {date}.");
+
             string jwtToken = Request.Headers["Authorization"];
 
             var client = new RestClient(_dataService.BaseUrl);

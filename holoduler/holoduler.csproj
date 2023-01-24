@@ -16,6 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.11" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.9.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="RestSharp" Version="108.0.3" />
   </ItemGroup>
@@ -28,7 +32,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\components\" />
+    <None Remove="ClientApp\src\App.tsx" />
+    <None Remove="ClientApp\src\components\atoms\button\MenuIconButton.tsx" />
+    <None Remove="ClientApp\src\components\atoms\button\PrimaryButton.tsx" />
+    <None Remove="ClientApp\src\components\molecules\MenuDrawer.tsx" />
+    <None Remove="ClientApp\src\components\organisms\layout\Header.tsx" />
+    <None Remove="ClientApp\src\components\pages\Holoduler.tsx" />
+    <None Remove="ClientApp\src\components\pages\Page404.tsx" />
+    <None Remove="ClientApp\src\components\templates\HeaderLayout.tsx" />
+    <None Remove="ClientApp\src\router\Router.tsx" />
+    <None Remove="ClientApp\src\theme\theme.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\types\api\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\App.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\theme\theme.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
