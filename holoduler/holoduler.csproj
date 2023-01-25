@@ -42,6 +42,7 @@
     <None Remove="ClientApp\src\components\templates\HeaderLayout.tsx" />
     <None Remove="ClientApp\src\router\Router.tsx" />
     <None Remove="ClientApp\src\theme\theme.ts" />
+    <None Remove="ClientApp\src\utils\DateHelper.ts" />
   </ItemGroup>
 
   <ItemGroup>

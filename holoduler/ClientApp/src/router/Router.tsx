@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { HeaderLayout } from "../components/templates/HeaderLayout";
@@ -9,6 +8,7 @@ export const Router = () => {
     return (
         <Routes>
             <Route path="/" element={<HeaderLayout><Holoduler /></HeaderLayout>} />
+            <Route path="/:date" element={<HeaderLayout><Holoduler /></HeaderLayout>} />
             <Route path="*" element={<Page404 />} />
         </Routes>
     );
