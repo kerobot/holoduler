@@ -29,7 +29,7 @@ namespace holoduler.Controllers
             var json = JsonConvert.SerializeObject(auth);
             var client = new RestClient(_dataService.BaseUrl);
 
-            var postRequest = new RestRequest("/login").AddJsonBody(json);
+            var postRequest = new RestRequest("/holoapi/login").AddJsonBody(json);
             var postResponse = await client.PostAsync(postRequest);
             if (!postResponse.IsSuccessful || postResponse.Content == null)
             {
@@ -44,7 +44,7 @@ namespace holoduler.Controllers
 
             _logger.LogInformation("request holodules {date}.", date);
 
-            var getRequest = new RestRequest($"/holodules/{date}");
+            var getRequest = new RestRequest($"/holoapi/holodules/{date}");
             getRequest.AddHeader("Content-Type", "application/json");
             getRequest.AddHeader("Authorization", $"Bearer {token.AccessToken}");
             var getResponse = await client.GetAsync(getRequest);
