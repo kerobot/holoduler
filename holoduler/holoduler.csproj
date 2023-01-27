@@ -37,6 +37,7 @@
     <None Remove="ClientApp\src\components\atoms\button\PrimaryButton.tsx" />
     <None Remove="ClientApp\src\components\molecules\MenuDrawer.tsx" />
     <None Remove="ClientApp\src\components\organisms\layout\Header.tsx" />
+    <None Remove="ClientApp\src\components\organisms\stream\StreamCard.tsx" />
     <None Remove="ClientApp\src\components\pages\Holoduler.tsx" />
     <None Remove="ClientApp\src\components\pages\Page404.tsx" />
     <None Remove="ClientApp\src\components\templates\HeaderLayout.tsx" />
@@ -45,7 +46,9 @@
     <None Remove="ClientApp\src\router\Router.tsx" />
     <None Remove="ClientApp\src\theme\theme.ts" />
     <None Remove="ClientApp\src\types\api\holodule.ts" />
+    <None Remove="ClientApp\src\types\member.ts" />
     <None Remove="ClientApp\src\utils\DateHelper.ts" />
+    <None Remove="ClientApp\src\utils\StreamerHelper.ts" />
   </ItemGroup>
 
   <ItemGroup>

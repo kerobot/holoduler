@@ -3,7 +3,6 @@ using holoduler.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
 
 namespace holoduler.Controllers
 {
@@ -23,6 +22,7 @@ namespace holoduler.Controllers
         [HttpGet("{date}")]
         public async Task<string?> Get(string date)
         {
+            // トークンの取得
             _logger.LogInformation("request access token.");
 
             var auth = new Auth(_dataService.UserName, _dataService.Password);
@@ -33,15 +33,16 @@ namespace holoduler.Controllers
             var postResponse = await client.PostAsync(postRequest);
             if (!postResponse.IsSuccessful || postResponse.Content == null)
             {
-                return "error";
+                return "{ \"status\": \"login error\" }";
             }
- 
+
             Token? token = JsonConvert.DeserializeObject<Token>(postResponse.Content);
             if (token == null)
             {
-                return "error";
+                return "{ \"status\": \"token error\" }";
             }
 
+            // スケジュールの取得
             _logger.LogInformation("request holodules {date}.", date);
 
             var getRequest = new RestRequest($"/holoapi/holodules/{date}");
@@ -50,7 +51,7 @@ namespace holoduler.Controllers
             var getResponse = await client.GetAsync(getRequest);
             if (!getResponse.IsSuccessful)
             {
-                return "error";
+                return "{ \"status\": \"holodules error\" }";
             }
 
             return getResponse.Content;

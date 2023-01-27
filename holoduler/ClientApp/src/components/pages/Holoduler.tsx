@@ -1,8 +1,9 @@
-import { memo, useEffect, VFC, useRef } from "react";
+import { memo, useCallback, useEffect, VFC, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Center, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 
 import { DateHelper } from "../../utils/DateHelper";
+import { StreamCard } from "../organisms/stream/StreamCard";
 import { useHolodules } from "../../hooks/useHolodules";
 
 export const Holoduler: VFC = memo(() => {
@@ -19,6 +20,12 @@ export const Holoduler: VFC = memo(() => {
         }
     }, [getHolodules, dateString]);
 
+    const onClickStream = useCallback(
+        (key: string) => {
+        },
+        []
+    );
+
     return (
         <>
             <h1>ホロジューラー</h1>
@@ -34,7 +41,10 @@ export const Holoduler: VFC = memo(() => {
                         holodules.length > 0 ? (
                             holodules.map((holodule) => (
                                 <WrapItem key={holodule.key} mx="auto">
-                                    {holodule.title}
+                                    <StreamCard
+                                        holodule={holodule}
+                                        onClick={onClickStream}
+                                    />
                                 </WrapItem>
                             ))
                         ) : (
