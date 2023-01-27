@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, VFC, useRef } from "react";
+import { memo, useEffect, VFC, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Center, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 
@@ -20,31 +20,19 @@ export const Holoduler: VFC = memo(() => {
         }
     }, [getHolodules, dateString]);
 
-    const onClickStream = useCallback(
-        (key: string) => {
-        },
-        []
-    );
-
     return (
         <>
-            <h1>ホロジューラー</h1>
-            <p>{dateString}</p>
-
             {loading ? (
                 <Center h="100vh">
                     <Spinner color="teal.200" />
                 </Center>
             ) : (
-                <Wrap p={{ base: 4, md: 10 }}>
+                <Wrap>
                     {
                         holodules.length > 0 ? (
                             holodules.map((holodule) => (
                                 <WrapItem key={holodule.key} mx="auto">
-                                    <StreamCard
-                                        holodule={holodule}
-                                        onClick={onClickStream}
-                                    />
+                                    <StreamCard holodule={holodule} />
                                 </WrapItem>
                             ))
                         ) : (

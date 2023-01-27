@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, useCallback, useState, VFC } from "react";
-import { Box, Flex, Heading, Link, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Heading, ButtonGroup, Button, Spacer, Text, Center } from "@chakra-ui/react";
+import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons'
 import { useNavigate } from "react-router-dom";
 
 import { DateHelper } from "../../../utils/DateHelper";
-import { MenuIconButton } from "../../atoms/button/MenuIconButton";
-import { MenuDrawer } from "../../molecules/MenuDrawer";
 
 export const Header: VFC = memo(() => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [dateState, setDateState] = useState(DateHelper.dateToString(new Date()));
 
     const navigate = useNavigate();
@@ -38,48 +36,18 @@ export const Header: VFC = memo(() => {
     }, [dateState]); // 依存配列には関数内で利用する日付文字列を指定
 
     return (
-        <>
-            <Flex
-                as="nav"
-                bg="teal.500"
-                color="gray.50"
-                align="center"
-                justify="space-between"
-                padding={{ base: 3, md: 5 }}
-            >
-                <Flex
-                    align="center"
-                    as="a"
-                    mr={8}
-                    _hover={{ cursor: "pointer" }}
-                    onClick={onClickNow}
-                >
-                    <Heading as="h1" fontSize={{ base: "md", md: "lg" }}>
-                        ホロジューラー
-                    </Heading>
-                </Flex>
-                <Flex
-                    align="center"
-                    fontSize="sm"
-                    display={{ base: "none", md: "flex" }}
-                    flexGrow={2}
-                >
-                    <Box pr={4}>
-                        <Link onClick={onClickPrev}>前日</Link>
-                    </Box>
-                    <Box>
-                        <Link onClick={onClickNext}>翌日</Link>
-                    </Box>
-                </Flex>
-                <MenuIconButton onOpen={onOpen} />
-            </Flex>
-            <MenuDrawer
-                isOpen={isOpen}
-                onClose={onClose}
-                onClickNow={onClickNow}
-                onClickPrev={onClickPrev}
-                onClickNext={onClickNext}
-            />
-        </>
+        <Flex minWidth='max-content' alignItems='center' gap='2' p='3' h="20" w="100%">
+            <Box as="a" _hover={{ cursor: "pointer" }} onClick={onClickNow}>
+                <Heading size='lg'>HOLODULER</Heading>
+            </Box>
+            <Spacer />
+            <ButtonGroup gap='2'>
+                <Button leftIcon={<ArrowLeftIcon />} colorScheme='facebook' variant='outline' onClick={onClickPrev}>Prev</Button>
+                <Center>
+                    <Text fontSize='lg'>{DateHelper.dateToString(DateHelper.stringToDate(dateState),"/")}</Text>
+                </Center>
+                <Button rightIcon={<ArrowRightIcon />} colorScheme='facebook' variant='outline' onClick={onClickNext}>Next</Button>
+            </ButtonGroup>
+        </Flex>
     );
 });

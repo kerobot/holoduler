@@ -1,41 +1,45 @@
 import { memo, VFC } from "react";
-import { Box, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Image, Stack, Text, Avatar, Link } from "@chakra-ui/react";
 
 import { Holodule } from "../../../types/api/holodule";
 import { StreamerHelper } from "../../../utils/StreamerHelper";
+import { DateHelper } from "../../../utils/DateHelper";
 
 type Props = {
     holodule: Holodule;
-    onClick: (key: string) => void;
 };
 
 export const StreamCard: VFC<Props> = memo((props) => {
-    const { holodule, onClick } = props;
+    const { holodule } = props;
 
     return (
-        <Box
-            w="260px"
-            h="260px"
-            bg="white"
-            borderRadius="10px"
-            shadow="md"
-            p={4}
-            _hover={{ cursor: "pointer", opacity: 0.8 }}
-            onClick={() => onClick(holodule.key)}
-        >
+        <Box w="290px" h="200px" bg="white" borderRadius="10px" shadow="md" p={2} >
             <Stack textAlign="center">
-                <Image
-                    borderRadius="full"
-                    boxSize="160px"
-                    src={StreamerHelper.getThumbnailUrl(holodule.video_id)}
-                    m="auto"
-                />
-                <Text fontSize="lg" fontWeight="bold">
-                    {holodule.name}
-                </Text>
-                <Text fontSize="sm" color="gray">
-                    {holodule.title}
-                </Text>
+                <Box w='270px' overflow='hidden'>
+                    <Box display='flex'>
+                        <Box w="120px" textAlign="center">
+                            <Box fontWeight='semibold' p="1">
+                                {DateHelper.getStringTime(DateHelper.stringToDateTime(holodule.datetime))}
+                            </Box>
+                            <Box>
+                                <Link href={StreamerHelper.getChannelUrl(holodule.name)} isExternal>
+                                    <Avatar name={holodule.name} src={StreamerHelper.getImageUrl(holodule.name)} />
+                                </Link>
+                            </Box>
+                            <Box fontWeight='semibold' p="1">
+                                {holodule.name}
+                            </Box>
+                        </Box>
+                        <Box w="150px">
+                            <Link href={holodule.url} isExternal>
+                                <Image src={StreamerHelper.getThumbnailUrl(holodule.video_id)} w="100%" />
+                            </Link>
+                        </Box>
+                    </Box>
+                    <Text fontSize="sm" color="black" mt="1" noOfLines={3}>
+                        {holodule.title}
+                    </Text>
+                </Box>
             </Stack>
         </Box>
     );

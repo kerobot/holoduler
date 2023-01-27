@@ -33,9 +33,6 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\App.tsx" />
-    <None Remove="ClientApp\src\components\atoms\button\MenuIconButton.tsx" />
-    <None Remove="ClientApp\src\components\atoms\button\PrimaryButton.tsx" />
-    <None Remove="ClientApp\src\components\molecules\MenuDrawer.tsx" />
     <None Remove="ClientApp\src\components\organisms\layout\Header.tsx" />
     <None Remove="ClientApp\src\components\organisms\stream\StreamCard.tsx" />
     <None Remove="ClientApp\src\components\pages\Holoduler.tsx" />
@@ -54,6 +51,11 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\App.tsx" />
     <TypeScriptCompile Include="ClientApp\src\theme\theme.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\components\atoms\button\" />
+    <Folder Include="ClientApp\src\components\molecules\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

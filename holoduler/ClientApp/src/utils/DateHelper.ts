@@ -1,4 +1,4 @@
-﻿export class DateHelper {
+export class DateHelper {
     static dateToString(date: Date, separator: string = ""): string {
         const y = date.getFullYear();
         const m = ("00" + (date.getMonth() + 1)).slice(-2);
@@ -35,5 +35,9 @@
         const minute = Number(stringDateTime.substr(11, 2));
         const second = Number(stringDateTime.substr(13, 2));
         return new Date(year, month, day, hour, minute, second);
+    }
+
+    static getStringTime(date: Date): string {
+        return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}～`;
     }
 }
