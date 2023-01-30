@@ -13,7 +13,7 @@ export const StreamCard: VFC<Props> = memo((props) => {
     const { holodule } = props;
 
     return (
-        <Box w="290px" h="200px" bg="white" borderRadius="10px" shadow="md" p={2} >
+        <Box w="290px" h="200px" bg="white" borderRadius="10px" shadow="md" p={2} _hover={{ opacity: 0.8 }}>
             <Stack textAlign="center">
                 <Box w='270px' overflow='hidden'>
                     <Box display='flex'>
