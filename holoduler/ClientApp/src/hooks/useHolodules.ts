@@ -19,7 +19,7 @@ export const useHolodules = () => {
                 showMessage({ title: "スケジュールの取得に失敗しました", status: "error" })
             )
             .finally(() => setLoading(false));
-    }, []);
+    }, [showMessage]);
 
     return { getHolodules, loading, holodules };
 };

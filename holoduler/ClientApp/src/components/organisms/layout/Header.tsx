@@ -10,10 +10,10 @@ export const Header: VFC = memo(() => {
     const navigate = useNavigate();
 
     // 指定した日付を state に保持してページ遷移
-    const navigateDate = (dateString: string) => {
+    function navigateDate(dateString: string) {
         setDateState(dateString);
         navigate(`/${dateString}`);
-    };
+    }
 
     // 日付を移動するためのメモ化したコールバック関数群
     // 依存配列の要素のいずれかが変化した場合のみメモ化した値を再計算する
@@ -21,17 +21,20 @@ export const Header: VFC = memo(() => {
     // 当日に移動
     const onClickNow = useCallback(() => {
         navigateDate(DateHelper.dateToString(new Date()));
-    }, [dateState, navigateDate]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateState]);
 
     // 前日に移動
     const onClickPrev = useCallback(() => {
         navigateDate(DateHelper.getPrevStringDate(dateState));
-    }, [dateState, navigateDate]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateState]);
 
     // 翌日に移動
     const onClickNext = useCallback(() => {
         navigateDate(DateHelper.getNextStringDate(dateState));
-    }, [dateState, navigateDate]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateState]);
 
     return (
         <Flex minWidth='max-content' alignItems='center' gap='2' p='3' h="20" w="100%">
