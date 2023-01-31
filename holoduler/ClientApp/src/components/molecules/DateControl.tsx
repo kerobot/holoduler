@@ -6,7 +6,7 @@ import { NextButton } from "../atoms/button/NextButton";
 import { DateHelper } from "../../utils/DateHelper";
 
 type Props = {
-    dateState: string;
+    dateState: Date;
     onClickPrev: () => void;
     onClickNext: () => void;
 };
@@ -22,7 +22,7 @@ export const DateControl: VFC<Props> = memo((props) => {
         <ButtonGroup gap='2'>
             <PrevButton onClick={onClickPrev} />
             <Center>
-                <Text fontSize='lg'>{DateHelper.dateToString(DateHelper.stringToDate(dateState),"/")}</Text>
+                <Text fontSize='xl' as='b'>{DateHelper.formatDate(dateState,"/")}</Text>
             </Center>
             <NextButton onClick={onClickNext} />
         </ButtonGroup>

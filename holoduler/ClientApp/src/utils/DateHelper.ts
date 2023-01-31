@@ -1,30 +1,19 @@
 export class DateHelper {
-    static dateToString(date: Date, separator: string = ""): string {
+    static addDays(date: Date, days: number): Date {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+    }
+
+    static formatDate(date: Date, separator: string = ""): string {
         const y = date.getFullYear();
         const m = ("00" + (date.getMonth() + 1)).slice(-2);
         const d = ("00" + date.getDate()).slice(-2);
         return `${y}${separator}${m}${separator}${d}`;
     }
 
-    static stringToDate(stringDate: string): Date {
-        const year = Number(stringDate.substr(0, 4));
-        const month = Number(stringDate.substr(4, 2)) - 1;
-        const day = Number(stringDate.substr(6, 2));
-        return new Date(year, month, day);
-    }
-
-    static getNextStringDate(stringDate: string): string {
-        const date = DateHelper.stringToDate(stringDate);
-        return DateHelper.dateToString(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
-    }
-
-    static getPrevStringDate(stringDate: string): string {
-        const date = DateHelper.stringToDate(stringDate);
-        return DateHelper.dateToString(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1));
-    }
-
-    static removeSeparatorStringDate(stringDate: string): string {
-        return stringDate.replace(/\//g, '');
+    static formatTime(date: Date, separator: string = ""): string {
+        const h = date.getHours();
+        const m = ("00" + date.getMinutes()).slice(-2);
+        return `${h}${separator}${m}`;
     }
 
     static stringToDateTime(stringDateTime: string): Date {
@@ -35,9 +24,5 @@ export class DateHelper {
         const minute = Number(stringDateTime.substr(11, 2));
         const second = Number(stringDateTime.substr(13, 2));
         return new Date(year, month, day, hour, minute, second);
-    }
-
-    static getStringTime(date: Date): string {
-        return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}～`;
     }
 }

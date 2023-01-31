@@ -10,11 +10,11 @@ export const NextButton: VFC<Props> = (props) => {
     const { onClick } = props;
     return (
         <Button
-            leftIcon={<ArrowRightIcon />}
-            colorScheme='facebook'
-            variant='outline'
+            rightIcon={<ArrowRightIcon />}
+            colorScheme='blue'
+            variant='solid'
             display="block"
             onClick={onClick}
-        />
+        >Next</Button>
     );
 };

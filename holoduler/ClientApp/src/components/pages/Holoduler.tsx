@@ -8,7 +8,7 @@ import { useHolodules } from "../../hooks/useHolodules";
 
 export const Holoduler: VFC = memo(() => {
     const { date } = useParams();
-    const dateString = date || DateHelper.dateToString(new Date());
+    const dateString = date || DateHelper.formatDate(new Date());
     const didMountRef = useRef(false);
     const { getHolodules, loading, holodules } = useHolodules();
 
@@ -23,8 +23,13 @@ export const Holoduler: VFC = memo(() => {
     return (
         <>
             {loading ? (
-                <Center h="100vh">
-                    <Spinner color="teal.200" />
+                <Center h='100px' w="100%">
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl' />
                 </Center>
             ) : (
                 <Wrap>

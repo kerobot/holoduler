@@ -6,13 +6,13 @@ import { DateControl } from "../../molecules/DateControl";
 import { DateHelper } from "../../../utils/DateHelper";
 
 export const Header: VFC = memo(() => {
-    const [dateState, setDateState] = useState(DateHelper.dateToString(new Date()));
+    const [dateState, setDateState] = useState(new Date());
     const navigate = useNavigate();
 
     // 指定した日付を state に保持してページ遷移
-    function navigateDate(dateString: string) {
-        setDateState(dateString);
-        navigate(`/${dateString}`);
+    function navigateDate(date: Date) {
+        setDateState(date);
+        navigate(`/${DateHelper.formatDate(date)}`);
     }
 
     // 日付を移動するためのメモ化したコールバック関数群
@@ -20,19 +20,19 @@ export const Header: VFC = memo(() => {
 
     // 当日に移動
     const onClickNow = useCallback(() => {
-        navigateDate(DateHelper.dateToString(new Date()));
+        navigateDate(new Date());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateState]);
 
     // 前日に移動
     const onClickPrev = useCallback(() => {
-        navigateDate(DateHelper.getPrevStringDate(dateState));
+        navigateDate(DateHelper.addDays(dateState, -1));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateState]);
 
     // 翌日に移動
     const onClickNext = useCallback(() => {
-        navigateDate(DateHelper.getNextStringDate(dateState));
+        navigateDate(DateHelper.addDays(dateState, 1));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateState]);
 

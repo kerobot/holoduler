@@ -11,10 +11,10 @@ export const PrevButton: VFC<Props> = (props) => {
     return (
         <Button
             leftIcon={<ArrowLeftIcon />}
-            colorScheme='facebook'
-            variant='outline'
+            colorScheme='blue'
+            variant='solid'
             display="block"
             onClick={onClick}
-        />
+        >Prev</Button>
     );
 };
