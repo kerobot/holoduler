@@ -19,7 +19,7 @@ export const StreamCard: VFC<Props> = memo((props) => {
                     <Box display='flex'>
                         <Box w="120px" textAlign="center">
                             <Box fontWeight='semibold' p="1">
-                                {DateHelper.formatTime(DateHelper.stringToDateTime(holodule.datetime))}
+                                {DateHelper.formatTime(DateHelper.stringToDateTime(holodule.datetime),":")}
                             </Box>
                             <Box>
                                 <Link href={StreamerHelper.getChannelUrl(holodule.name)} isExternal>
