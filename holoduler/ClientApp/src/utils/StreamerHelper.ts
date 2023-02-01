@@ -2,18 +2,15 @@ import { Member } from "../types/member";
 
 export class StreamerHelper {
     static getImageUrl(name: string): string {
-        const imgurl = `${process.env.PUBLIC_URL}/img/${StreamerHelper.members[name].img}`;
-        return imgurl;
+        return `${process.env.PUBLIC_URL}/img/${StreamerHelper.members[name].img}`;
     }
 
     static getChannelUrl(name: string): string {
-        const churl = `https://www.youtube.com/channel/${StreamerHelper.members[name].ch}`;
-        return churl;
+        return `https://www.youtube.com/channel/${StreamerHelper.members[name].ch}`;
     }
 
     static getThumbnailUrl(video_id: string): string {
-        const tmburl = `http://img.youtube.com/vi/${video_id}/default.jpg`;
-        return tmburl;
+        return `http://img.youtube.com/vi/${video_id}/hqdefault.jpg`;
     }
 
     static members: { [key: string]: Member } = {

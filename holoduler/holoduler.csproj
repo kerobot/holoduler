@@ -35,6 +35,7 @@
     <None Remove="ClientApp\src\App.tsx" />
     <None Remove="ClientApp\src\components\atoms\button\NextButton.tsx" />
     <None Remove="ClientApp\src\components\atoms\button\PrevButton.tsx" />
+    <None Remove="ClientApp\src\components\atoms\StreamTime.tsx" />
     <None Remove="ClientApp\src\components\molecules\DateControl.tsx" />
     <None Remove="ClientApp\src\components\organisms\layout\Header.tsx" />
     <None Remove="ClientApp\src\components\organisms\stream\StreamCard.tsx" />

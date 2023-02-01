@@ -42,7 +42,7 @@ export const Header: VFC = memo(() => {
                 <Heading size='lg'>HOLODULER</Heading>
             </Box>
             <Spacer />
-            <DateControl dateState={dateState} onClickPrev={onClickPrev} onClickNext={onClickNext}/>
+            <DateControl date={dateState} onClickPrev={onClickPrev} onClickNext={onClickNext}/>
         </Flex>
     );
 });

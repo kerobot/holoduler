@@ -1,6 +1,6 @@
 import { memo, useEffect, VFC, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { Center, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Center, Spinner, Wrap, WrapItem, Text } from "@chakra-ui/react";
 
 import { DateHelper } from "../../utils/DateHelper";
 import { StreamCard } from "../organisms/stream/StreamCard";
@@ -41,7 +41,7 @@ export const Holoduler: VFC = memo(() => {
                                 </WrapItem>
                             ))
                         ) : (
-                            <p>予定がありません</p>
+                            <Text fontSize="md" as="b">予定がありません</Text>
                         )
                     }
                 </Wrap>
