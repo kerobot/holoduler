@@ -1,10 +1,10 @@
 import { memo, VFC } from "react";
 import { Box, Image, Text, Link } from "@chakra-ui/react";
 
-import { Holodule } from "../../../types/api/holodule";
-import { StreamerHelper } from "../../../utils/StreamerHelper";
-import { DateHelper } from "../../../utils/DateHelper";
-import { StreamDate } from "../../atoms/StreamTime";
+import { Holodule } from "../../types/api/holodule";
+import { StreamerHelper } from "../../utils/StreamerHelper";
+import { DateHelper } from "../../utils/DateHelper";
+import { StreamTime } from "../atoms/StreamTime";
 
 type Props = {
     holodule: Holodule;
@@ -19,7 +19,7 @@ export const StreamCard: VFC<Props> = memo((props) => {
                 <Box display='flex'>
                     <Box w="120px" textAlign="center">
                         <Box fontWeight='semibold' p="1">
-                            <StreamDate date={DateHelper.stringToDateTime(holodule.datetime)}/>
+                            <StreamTime date={DateHelper.stringToDateTime(holodule.datetime)}/>
                         </Box>
                         <Box>
                             <Link href={StreamerHelper.getChannelUrl(holodule.name)} isExternal>

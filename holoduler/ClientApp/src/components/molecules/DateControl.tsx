@@ -1,9 +1,9 @@
 import { VFC, memo } from "react";
-import { Text, ButtonGroup, Center } from "@chakra-ui/react";
+import { ButtonGroup, Center } from "@chakra-ui/react";
 
-import { PrevButton } from "../atoms/button/PrevButton";
-import { NextButton } from "../atoms/button/NextButton";
-import { DateHelper } from "../../utils/DateHelper";
+import { PrevButton } from "../atoms/PrevButton";
+import { NextButton } from "../atoms/NextButton";
+import { StreamDate } from "../atoms/StreamDate";
 
 type Props = {
     date: Date;
@@ -21,9 +21,7 @@ export const DateControl: VFC<Props> = memo((props) => {
     return (
         <ButtonGroup gap='2'>
             <PrevButton onClick={onClickPrev} />
-            <Center>
-                <Text fontSize='xl' as='b'>{DateHelper.formatDate(date,"/")}</Text>
-            </Center>
+            <Center><StreamDate date={date} /></Center>
             <NextButton onClick={onClickNext} />
         </ButtonGroup>
     );

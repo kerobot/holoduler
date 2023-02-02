@@ -7,13 +7,11 @@ type Props = {
     date: Date;
 };
 
-export const StreamDate: VFC<Props> = memo((props) => {
-    const {
-        date
-    } = props;
+export const StreamTime: VFC<Props> = memo((props) => {
+    const { date } = props;
 
     const today = new Date();
-    const timeColor = date.getTime() < today.getTime() ? "#a9a9a9" : "#1e90ff";
+    const timeColor = date.getTime() < today.getTime() ? "gray.500" : "blue.500";
 
     return (
         <Text fontSize="md" as="b" noOfLines={1} color={timeColor}>

@@ -8,6 +8,7 @@ type Props = {
 
 export const PrevButton: VFC<Props> = (props) => {
     const { onClick } = props;
+
     return (
         <Button
             leftIcon={<ArrowLeftIcon />}

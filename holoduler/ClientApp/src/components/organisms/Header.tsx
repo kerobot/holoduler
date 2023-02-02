@@ -1,9 +1,10 @@
 import { memo, useCallback, useState, VFC } from "react";
-import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
+import { Flex, Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-import { DateControl } from "../../molecules/DateControl";
-import { DateHelper } from "../../../utils/DateHelper";
+import { TitleControl } from "../molecules/TitleControl";
+import { DateControl } from "../molecules/DateControl";
+import { DateHelper } from "../../utils/DateHelper";
 
 export const Header: VFC = memo(() => {
     const [dateState, setDateState] = useState(new Date());
@@ -15,11 +16,10 @@ export const Header: VFC = memo(() => {
         navigate(`/${DateHelper.formatDate(date)}`);
     }
 
-    // 日付を移動するためのメモ化したコールバック関数群
-    // 依存配列の要素のいずれかが変化した場合のみメモ化した値を再計算する
+    // TODO: useCallback から呼び出した関数内で state を更新した場合の依存関係の指定について再考
 
     // 当日に移動
-    const onClickNow = useCallback(() => {
+    const onClickToday = useCallback(() => {
         navigateDate(new Date());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateState]);
@@ -38,9 +38,7 @@ export const Header: VFC = memo(() => {
 
     return (
         <Flex minWidth='max-content' alignItems='center' gap='2' p='3' h="20" w="100%">
-            <Box as="a" _hover={{ cursor: "pointer" }} onClick={onClickNow}>
-                <Heading size='lg'>HOLODULER</Heading>
-            </Box>
+            <TitleControl onClickToday={onClickToday} />
             <Spacer />
             <DateControl date={dateState} onClickPrev={onClickPrev} onClickNext={onClickNext}/>
         </Flex>

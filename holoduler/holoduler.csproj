@@ -33,12 +33,10 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\App.tsx" />
-    <None Remove="ClientApp\src\components\atoms\button\NextButton.tsx" />
-    <None Remove="ClientApp\src\components\atoms\button\PrevButton.tsx" />
+    <None Remove="ClientApp\src\components\atoms\StreamDate.tsx" />
     <None Remove="ClientApp\src\components\atoms\StreamTime.tsx" />
     <None Remove="ClientApp\src\components\molecules\DateControl.tsx" />
-    <None Remove="ClientApp\src\components\organisms\layout\Header.tsx" />
-    <None Remove="ClientApp\src\components\organisms\stream\StreamCard.tsx" />
+    <None Remove="ClientApp\src\components\molecules\TitleControl.tsx" />
     <None Remove="ClientApp\src\components\pages\Holoduler.tsx" />
     <None Remove="ClientApp\src\components\pages\Page404.tsx" />
     <None Remove="ClientApp\src\components\templates\HeaderLayout.tsx" />

@@ -3,21 +3,25 @@ import { useParams } from "react-router-dom";
 import { Center, Spinner, Wrap, WrapItem, Text } from "@chakra-ui/react";
 
 import { DateHelper } from "../../utils/DateHelper";
-import { StreamCard } from "../organisms/stream/StreamCard";
+import { StreamCard } from "../organisms/StreamCard";
 import { useHolodules } from "../../hooks/useHolodules";
 
 export const Holoduler: VFC = memo(() => {
     const { date } = useParams();
-    const dateString = date || DateHelper.formatDate(new Date());
-    const didMountRef = useRef(false);
     const { getHolodules, loading, holodules } = useHolodules();
 
+    const dateString = date || DateHelper.formatDate(new Date());
+    const didMountRef = useRef(false);
+
     useEffect(() => {
-        if (!didMountRef.current) {
-            didMountRef.current = true;
-        } else {
-            getHolodules(dateString)
+        // strict モード対策
+        if (process.env.NODE_ENV === "development") {
+            if (didMountRef.current) {
+                didMountRef.current = false;
+                return;
+            }
         }
+        getHolodules(dateString)
     }, [getHolodules, dateString]);
 
     return (
