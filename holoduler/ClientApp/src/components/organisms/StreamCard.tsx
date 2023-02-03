@@ -8,10 +8,11 @@ import { StreamTime } from "../atoms/StreamTime";
 
 type Props = {
     holodule: Holodule;
+    today: Date;
 };
 
 export const StreamCard: VFC<Props> = memo((props) => {
-    const { holodule } = props;
+    const { holodule, today } = props;
 
     return (
         <Box w="300px" h="220px" bg="white" borderRadius="10px" shadow="md" p={2} _hover={{ opacity: 0.8 }}>
@@ -19,7 +20,7 @@ export const StreamCard: VFC<Props> = memo((props) => {
                 <Box display='flex'>
                     <Box w="120px" textAlign="center">
                         <Box fontWeight='semibold' p="1">
-                            <StreamTime date={DateHelper.stringToDateTime(holodule.datetime)}/>
+                            <StreamTime date={DateHelper.stringToDateTime(holodule.datetime)} today={today} />
                         </Box>
                         <Box>
                             <Link href={StreamerHelper.getChannelUrl(holodule.name)} isExternal>

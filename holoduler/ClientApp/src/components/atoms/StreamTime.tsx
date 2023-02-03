@@ -5,12 +5,12 @@ import { DateHelper } from "../../utils/DateHelper";
 
 type Props = {
     date: Date;
+    today: Date;
 };
 
 export const StreamTime: VFC<Props> = memo((props) => {
-    const { date } = props;
+    const { date, today } = props;
 
-    const today = new Date();
     const timeColor = date.getTime() < today.getTime() ? "gray.500" : "blue.500";
 
     return (

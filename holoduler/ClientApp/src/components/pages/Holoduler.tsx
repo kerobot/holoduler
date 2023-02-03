@@ -10,7 +10,8 @@ export const Holoduler: VFC = memo(() => {
     const { date } = useParams();
     const { getHolodules, loading, holodules } = useHolodules();
 
-    const dateString = date || DateHelper.formatDate(new Date());
+    const today = new Date();
+    const dateString = date || DateHelper.formatDate(today);
     const didMountRef = useRef(false);
 
     useEffect(() => {
@@ -41,7 +42,7 @@ export const Holoduler: VFC = memo(() => {
                         holodules.length > 0 ? (
                             holodules.map((holodule) => (
                                 <WrapItem key={holodule.key} mx="auto">
-                                    <StreamCard holodule={holodule} />
+                                    <StreamCard holodule={holodule} today={today} />
                                 </WrapItem>
                             ))
                         ) : (
