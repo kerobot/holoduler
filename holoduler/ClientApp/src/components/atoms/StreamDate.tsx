@@ -1,4 +1,4 @@
-import { VFC, memo } from "react";
+import { FC, memo } from "react";
 import { Text } from "@chakra-ui/react";
 
 import { DateHelper } from "../../utils/DateHelper";
@@ -7,7 +7,7 @@ type Props = {
     date: Date;
 };
 
-export const StreamDate: VFC<Props> = memo((props) => {
+export const StreamDate: FC<Props> = memo((props) => {
     const { date } = props;
 
     return (

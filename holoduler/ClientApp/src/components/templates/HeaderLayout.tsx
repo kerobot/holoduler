@@ -1,4 +1,4 @@
-import { memo, ReactNode, VFC } from "react";
+import { memo, ReactNode, FC } from "react";
 import { Flex } from "@chakra-ui/react";
 
 import { Header } from "../organisms/Header";
@@ -7,7 +7,7 @@ type Props = {
     children: ReactNode;
 };
 
-export const HeaderLayout: VFC<Props> = memo((props) => {
+export const HeaderLayout: FC<Props> = memo((props) => {
     const { children } = props;
 
     return (

@@ -1,4 +1,4 @@
-import { VFC, memo } from "react";
+import { FC, memo } from "react";
 import { Text } from "@chakra-ui/react";
 
 import { DateHelper } from "../../utils/DateHelper";
@@ -8,7 +8,7 @@ type Props = {
     today: Date;
 };
 
-export const StreamTime: VFC<Props> = memo((props) => {
+export const StreamTime: FC<Props> = memo((props) => {
     const { date, today } = props;
 
     const timeColor = date.getTime() < today.getTime() ? "gray.500" : "blue.500";

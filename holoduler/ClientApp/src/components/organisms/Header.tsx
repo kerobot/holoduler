@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, VFC } from "react";
+import { memo, useCallback, useState, FC } from "react";
 import { Flex, Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +6,7 @@ import { TitleControl } from "../molecules/TitleControl";
 import { DateControl } from "../molecules/DateControl";
 import { DateHelper } from "../../utils/DateHelper";
 
-export const Header: VFC = memo(() => {
+export const Header: FC = memo(() => {
     const [dateState, setDateState] = useState(new Date());
     const navigate = useNavigate();
 

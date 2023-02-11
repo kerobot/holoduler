@@ -1,4 +1,4 @@
-import { memo, useEffect, VFC, useRef } from "react";
+import { memo, useEffect, FC, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Center, Spinner, Wrap, WrapItem, Text } from "@chakra-ui/react";
 
@@ -6,7 +6,7 @@ import { DateHelper } from "../../utils/DateHelper";
 import { StreamCard } from "../organisms/StreamCard";
 import { useHolodules } from "../../hooks/useHolodules";
 
-export const Holoduler: VFC = memo(() => {
+export const Holoduler: FC = memo(() => {
     const { date } = useParams();
     const { getHolodules, loading, holodules } = useHolodules();
 

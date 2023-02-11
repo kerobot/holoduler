@@ -1,4 +1,4 @@
-import { VFC, memo } from "react";
+import { FC, memo } from "react";
 import { ButtonGroup, Center } from "@chakra-ui/react";
 
 import { PrevButton } from "../atoms/PrevButton";
@@ -11,7 +11,7 @@ type Props = {
     onClickNext: () => void;
 };
 
-export const DateControl: VFC<Props> = memo((props) => {
+export const DateControl: FC<Props> = memo((props) => {
     const {
         date,
         onClickPrev,

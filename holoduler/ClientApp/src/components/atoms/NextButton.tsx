@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { FC } from "react";
 import { Button } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
 
@@ -6,7 +6,7 @@ type Props = {
     onClick: () => void;
 };
 
-export const NextButton: VFC<Props> = (props) => {
+export const NextButton: FC<Props> = (props) => {
     const { onClick } = props;
 
     return (

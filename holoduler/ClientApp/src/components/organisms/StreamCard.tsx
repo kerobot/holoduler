@@ -1,4 +1,4 @@
-import { memo, VFC } from "react";
+import { memo, FC } from "react";
 import { Box, Image, Text, Link } from "@chakra-ui/react";
 
 import { Holodule } from "../../types/api/holodule";
@@ -11,7 +11,7 @@ type Props = {
     today: Date;
 };
 
-export const StreamCard: VFC<Props> = memo((props) => {
+export const StreamCard: FC<Props> = memo((props) => {
     const { holodule, today } = props;
 
     return (
