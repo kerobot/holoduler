@@ -7,7 +7,7 @@ import { StreamCard } from "../organisms/StreamCard";
 import { useHolodules } from "../../hooks/useHolodules";
 
 // 配信予定ページコンポーネント
-export const Holoduler: VFC = memo(() => {
+export const Holoduler: FC = memo(() => {
     const { date } = useParams();
     const { getHolodules, loading, holodules } = useHolodules();
 
