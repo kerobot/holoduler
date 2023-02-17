@@ -7,7 +7,8 @@ type Props = {
     children: ReactNode;
 };
 
-export const HeaderLayout: FC<Props> = memo((props) => {
+// テンプレートコンポーネント
+export const HeaderLayout: VFC<Props> = memo((props) => {
     const { children } = props;
 
     return (

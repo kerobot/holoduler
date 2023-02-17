@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace holoduler.Modls
 {
+    /// <summary>
+    /// Web API に渡す認証情報を保持するクラス
+    /// </summary>
     [JsonObject]
     public class Auth
     {

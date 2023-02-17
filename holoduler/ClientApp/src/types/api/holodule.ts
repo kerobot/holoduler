@@ -1,3 +1,4 @@
+// 配信予定
 export type Holodule = {
     key: string;
     code: string;

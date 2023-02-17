@@ -1,5 +1,8 @@
-﻿namespace holoduler.Services
+namespace holoduler.Services
 {
+    /// <summary>
+    /// Web API で利用する設定情報を扱う、サービスコンテナへ登録するサービスのインターフェース
+    /// </summary>
     public interface IDataService
     {
         string UserName { get; }

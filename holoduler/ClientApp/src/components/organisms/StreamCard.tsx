@@ -11,7 +11,8 @@ type Props = {
     today: Date;
 };
 
-export const StreamCard: FC<Props> = memo((props) => {
+// 配信予定コンポーネント
+export const StreamCard: VFC<Props> = memo((props) => {
     const { holodule, today } = props;
 
     return (

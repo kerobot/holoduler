@@ -4,6 +4,7 @@ import axios from "axios";
 import { Holodule } from "../types/api/holodule";
 import { useMessage } from "./useMessage";
 
+// Web API を呼んで配信予定を取得するカスタムフック
 export const useHolodules = () => {
     const { showMessage } = useMessage();
 

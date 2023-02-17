@@ -6,6 +6,7 @@ type Props = {
     status: "info" | "warning" | "success" | "error";
 };
 
+// メッセージを表示するカスタムフック
 export const useMessage = () => {
     const toast = useToast();
 

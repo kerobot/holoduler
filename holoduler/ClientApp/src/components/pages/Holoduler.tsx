@@ -6,7 +6,8 @@ import { DateHelper } from "../../utils/DateHelper";
 import { StreamCard } from "../organisms/StreamCard";
 import { useHolodules } from "../../hooks/useHolodules";
 
-export const Holoduler: FC = memo(() => {
+// 配信予定ページコンポーネント
+export const Holoduler: VFC = memo(() => {
     const { date } = useParams();
     const { getHolodules, loading, holodules } = useHolodules();
 

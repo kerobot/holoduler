@@ -6,7 +6,8 @@ type Props = {
     onClick: () => void;
 };
 
-export const PrevButton: FC<Props> = (props) => {
+// Prevボタンコンポーネント
+export const PrevButton: VFC<Props> = (props) => {
     const { onClick } = props;
 
     return (

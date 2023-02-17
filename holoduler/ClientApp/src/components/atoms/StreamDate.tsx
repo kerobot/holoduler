@@ -7,7 +7,8 @@ type Props = {
     date: Date;
 };
 
-export const StreamDate: FC<Props> = memo((props) => {
+// 配信日付表示コンポーネント
+export const StreamDate: VFC<Props> = memo((props) => {
     const { date } = props;
 
     return (

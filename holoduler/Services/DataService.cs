@@ -1,7 +1,10 @@
-﻿using holoduler.Services;
+using holoduler.Services;
 
 namespace holoduler.Services
 {
+    /// <summary>
+    /// Web API で利用する設定情報を扱う、サービスコンテナへ登録するサービスクラス
+    /// </summary>
     public class DataService : IDataService
     {
         private readonly string _userName;

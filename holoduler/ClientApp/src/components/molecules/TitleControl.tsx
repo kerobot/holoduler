@@ -5,7 +5,8 @@ type Props = {
     onClickToday: () => void;
 };
 
-export const TitleControl: FC<Props> = memo((props) => {
+// タイトルを表示するコンポーネント
+export const TitleControl: VFC<Props> = memo((props) => {
     const { onClickToday } = props;
 
     return (

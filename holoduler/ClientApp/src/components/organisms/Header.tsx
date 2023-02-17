@@ -6,7 +6,8 @@ import { TitleControl } from "../molecules/TitleControl";
 import { DateControl } from "../molecules/DateControl";
 import { DateHelper } from "../../utils/DateHelper";
 
-export const Header: FC = memo(() => {
+// ヘッダーコンポーネント
+export const Header: VFC = memo(() => {
     const [dateState, setDateState] = useState(new Date());
     const navigate = useNavigate();
 

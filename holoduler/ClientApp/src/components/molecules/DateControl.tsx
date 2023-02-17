@@ -11,7 +11,8 @@ type Props = {
     onClickNext: () => void;
 };
 
-export const DateControl: FC<Props> = memo((props) => {
+// 日付移動と日付表示を行うコンポーネント
+export const DateControl: VFC<Props> = memo((props) => {
     const {
         date,
         onClickPrev,

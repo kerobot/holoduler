@@ -1,8 +1,10 @@
 export class DateHelper {
+    // 日付加算
     static addDays(date: Date, days: number): Date {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
     }
 
+    // 日付フォーマット
     static formatDate(date: Date, separator: string = ""): string {
         const y = date.getFullYear();
         const m = ("00" + (date.getMonth() + 1)).slice(-2);
@@ -10,12 +12,14 @@ export class DateHelper {
         return `${y}${separator}${m}${separator}${d}`;
     }
 
+    // 時間フォーマット
     static formatTime(date: Date, separator: string = ""): string {
         const h = date.getHours();
         const m = ("00" + date.getMinutes()).slice(-2);
         return `${h}${separator}${m}`;
     }
 
+    // 文字列からDate型
     static stringToDateTime(stringDateTime: string): Date {
         const year = Number(stringDateTime.substr(0, 4));
         const month = Number(stringDateTime.substr(4, 2)) - 1;

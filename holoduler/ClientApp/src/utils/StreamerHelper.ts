@@ -1,18 +1,22 @@
 import { Member } from "../types/member";
 
 export class StreamerHelper {
+    // アイコンURL
     static getImageUrl(name: string): string {
         return `${process.env.PUBLIC_URL}/img/${StreamerHelper.members[name].img}`;
     }
 
+    // チャンネルURL
     static getChannelUrl(name: string): string {
         return `https://www.youtube.com/channel/${StreamerHelper.members[name].ch}`;
     }
 
+    // サムネイルURL（HD画質固定）
     static getThumbnailUrl(video_id: string): string {
         return `http://img.youtube.com/vi/${video_id}/hqdefault.jpg`;
     }
 
+    // 配信者定義
     static members: { [key: string]: Member } = {
         "ホロライブ": { name: "ホロライブ", img: "hololive.jpg", ch: "UCJFZiqLMntJufDCHc6bQixg" },
 
