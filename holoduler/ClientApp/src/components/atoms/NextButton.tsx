@@ -7,7 +7,7 @@ type Props = {
 };
 
 // Nextボタンコンポーネント
-export const NextButton: VFC<Props> = (props) => {
+export const NextButton: FC<Props> = (props) => {
     const { onClick } = props;
 
     return (

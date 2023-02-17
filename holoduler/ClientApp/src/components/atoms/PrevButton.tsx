@@ -7,7 +7,7 @@ type Props = {
 };
 
 // Prevボタンコンポーネント
-export const PrevButton: VFC<Props> = (props) => {
+export const PrevButton: FC<Props> = (props) => {
     const { onClick } = props;
 
     return (

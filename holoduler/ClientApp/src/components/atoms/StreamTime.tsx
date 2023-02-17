@@ -9,7 +9,7 @@ type Props = {
 };
 
 // 配信時間表示コンポーネント
-export const StreamTime: VFC<Props> = memo((props) => {
+export const StreamTime: FC<Props> = memo((props) => {
     const { date, today } = props;
 
     const timeColor = date.getTime() < today.getTime() ? "gray.500" : "blue.500";

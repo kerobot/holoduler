@@ -8,7 +8,7 @@ type Props = {
 };
 
 // テンプレートコンポーネント
-export const HeaderLayout: VFC<Props> = memo((props) => {
+export const HeaderLayout: FC<Props> = memo((props) => {
     const { children } = props;
 
     return (
