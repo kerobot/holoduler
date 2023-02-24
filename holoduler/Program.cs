@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 var userName = Environment.GetEnvironmentVariable("API_USERNAME")!;
 var password = Environment.GetEnvironmentVariable("API_PASSWORD")!;
 var baseUrl = Environment.GetEnvironmentVariable("API_URL")!;
+// サービスコンテナへ登録
 builder.Services.AddTransient<IDataService>(_ => new DataService(userName, password, baseUrl));
 // コントローラーを使用
 builder.Services.AddControllers();
@@ -22,10 +23,10 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-// 規則ルーティング（Conventional routing）から、Web API 2 の属性ルーティング （Attribute routing）へ変更
+// Web API 2 の属性ルーティング（Attribute routing）
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-}); 
+});
 app.MapFallbackToFile("index.html"); ;
 app.Run();
