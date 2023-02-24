@@ -4,9 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 // 環境変数から取得
 var userName = Environment.GetEnvironmentVariable("API_USERNAME")!;
 var password = Environment.GetEnvironmentVariable("API_PASSWORD")!;
-var baseUrl = Environment.GetEnvironmentVariable("API_URL")!;
+var endpoint = Environment.GetEnvironmentVariable("API_ENDPOINT")!;
 // サービスコンテナへ登録
-builder.Services.AddTransient<IDataService>(_ => new DataService(userName, password, baseUrl));
+builder.Services.AddTransient<IDataService>(_ => new DataService(userName, password, endpoint));
 // コントローラーを使用
 builder.Services.AddControllers();
 var app = builder.Build();

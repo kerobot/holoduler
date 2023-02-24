@@ -1,5 +1,3 @@
-using holoduler.Services;
-
 namespace holoduler.Services
 {
     /// <summary>
@@ -9,17 +7,17 @@ namespace holoduler.Services
     {
         private readonly string _userName;
         private readonly string _password;
-        private readonly string _baseUrl;
+        private readonly string _endpoint;
 
-        public DataService(string userName, string password, string baseUrl)
+        public DataService(string userName, string password, string endpoint)
         {
             _userName = userName;
             _password = password;
-            _baseUrl = baseUrl;
+            _endpoint = endpoint;
         }
 
         public string UserName => _userName;
         public string Password => _password;
-        public string BaseUrl => _baseUrl;
+        public string Endpoint => _endpoint;
     }
 }

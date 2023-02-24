@@ -1,4 +1,4 @@
-﻿using holoduler.Modls;
+using holoduler.Modls;
 using holoduler.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -27,7 +27,7 @@ namespace holoduler.Controllers
 
             var auth = new Auth(_dataService.UserName, _dataService.Password);
             var json = JsonConvert.SerializeObject(auth);
-            var client = new RestClient(_dataService.BaseUrl);
+            var client = new RestClient(_dataService.Endpoint);
 
             var postRequest = new RestRequest("/holoapi/login").AddJsonBody(json);
             var postResponse = await client.PostAsync(postRequest);
