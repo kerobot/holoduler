@@ -12,36 +12,31 @@ export const Header: FC = memo(() => {
     const navigate = useNavigate();
 
     // 指定した日付を state に保持してページ遷移
-    function navigateDate(date: Date) {
+    const navigateDate = useCallback((date: Date) => {
         setDateState(date);
         navigate(`/${DateHelper.formatDate(date)}`);
-    }
-
-    // TODO: useCallback から呼び出した関数内で state を更新した場合の依存関係の指定について再考
+    }, [navigate]);
 
     // 当日に移動
     const onClickToday = useCallback(() => {
         navigateDate(new Date());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dateState]);
+    }, [navigateDate]);
 
     // 前日に移動
     const onClickPrev = useCallback(() => {
         navigateDate(DateHelper.addDays(dateState, -1));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dateState]);
+    }, [navigateDate, dateState]);
 
     // 翌日に移動
     const onClickNext = useCallback(() => {
         navigateDate(DateHelper.addDays(dateState, 1));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dateState]);
+    }, [navigateDate, dateState]);
 
     return (
         <Flex minWidth='max-content' alignItems='center' gap='2' p='3' h="20" w="100%">
             <TitleControl onClickToday={onClickToday} />
             <Spacer />
-            <DateControl date={dateState} onClickPrev={onClickPrev} onClickNext={onClickNext}/>
+            <DateControl date={dateState} onClickPrev={onClickPrev} onClickNext={onClickNext} />
         </Flex>
     );
 });
