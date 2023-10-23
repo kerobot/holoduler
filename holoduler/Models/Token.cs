@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace holoduler.Modls
+namespace holoduler.Models
 {
     /// <summary>
     /// Web API から返却されるアクセストークンを保持するクラス

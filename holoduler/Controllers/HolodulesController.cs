@@ -1,4 +1,4 @@
-using holoduler.Modls;
+using holoduler.Models;
 using holoduler.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

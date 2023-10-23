@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace holoduler.Modls
+namespace holoduler.Models
 {
     /// <summary>
     /// Web API に渡す認証情報を保持するクラス
