@@ -76,9 +76,11 @@ export class StreamerHelper {
         "Risu": { name: "Ayunda Risu", img: "ayunda_risu.jpg", ch: "@AyundaRisu" },
         "Moona": { name: "Moona Hoshinova", img: "moona_hoshinova.jpg", ch: "@MoonaHoshinova" },
         "Iofi": { name: "Airani Iofifteen", img: "airani_iofifteen.jpg", ch: "@AiraniIofifteen" },
+
         "Ollie": { name: "Kureiji Ollie", img: "kureiji_ollie.jpg", ch: "@KureijiOllie" },
         "Anya": { name: "Anya Melfissa", img: "anya_melfissa.jpg", ch: "@AnyaMelfissa" },
         "Reine": { name: "Pavolia Reine", img: "pavolia_reine.jpg", ch: "@PavoliaReine" },
+
         "Zeta": { name: "Vestia Zeta", img: "vestia_zeta.jpg", ch: "@VestiaZeta" },
         "Kaela": { name: "Kaela Kovalskia", img: "kaela_kovalskia.jpg", ch: "@KaelaKovalskia" },
         "Kobo": { name: "Kobo Kanaeru", img: "kobo_kanaeru.jpg", ch: "@KoboKanaeru" },
@@ -90,6 +92,7 @@ export class StreamerHelper {
         "Amelia": { name: "Watson Amelia", img: "watson_amelia.jpg", ch: "@WatsonAmelia" },
 
         "IRyS": { name: "IRyS", img: "irys.jpg", ch: "@IRyS" },
+
         "Fauna": { name: "Ceres Fauna", img: "ceres_fauna.jpg", ch: "@CeresFauna" },
         "Kronii": { name: "Ouro Kronii", img: "ouro_kronii.jpg", ch: "@OuroKronii" },
         "Mumei": { name: "Nanashi Mumei", img: "nanashi_mumei.jpg", ch: "@NanashiMumei" },
@@ -100,7 +103,5 @@ export class StreamerHelper {
         "Bijou": { name: "Koseki Bijou", img: "koseki_bijou.jpg", ch: "@KosekiBijou" },
         "Nerissa": { name: "Nerissa Ravencroft", img: "nerissa_ravencroft.jpg", ch: "@NerissaRavencroft" },
         "FUWAMOCO": { name: "FUWAMOCO", img: "fuwamoco.jpg", ch: "@FUWAMOCOch" },
-        "Fuwawa": { name: "FUWAMOCO", img: "fuwamoco.jpg", ch: "@FUWAMOCOch" },
-        "Mococo": { name: "FUWAMOCO", img: "fuwamoco.jpg", ch: "@FUWAMOCOch" },
     };
 }
