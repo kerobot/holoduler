@@ -4,15 +4,15 @@ import { Center, Spinner, Wrap, WrapItem, Text } from "@chakra-ui/react";
 
 import { DateHelper } from "../../utils/DateHelper";
 import { StreamCard } from "../organisms/StreamCard";
-import { useHolodules } from "../../hooks/useHolodules";
+import { useSchedules } from "../../hooks/useSchedules";
 
 // 配信予定ページコンポーネント
 export const Holoduler: FC = memo(() => {
     const { date } = useParams();
-    const { getHolodules, loading, holodules } = useHolodules();
+    const { getSchedules, loading, schedules } = useSchedules();
 
     const today = new Date();
-    const dateString = date || DateHelper.formatDate(today);
+    const dateString = date || DateHelper.formatDate(today, "-");
     const didMountRef = useRef(false);
 
     useEffect(() => {
@@ -23,8 +23,10 @@ export const Holoduler: FC = memo(() => {
                 return;
             }
         }
-        getHolodules(dateString)
-    }, [getHolodules, dateString]);
+        getSchedules(dateString)
+    }, [getSchedules, dateString]);
+
+    const arr = schedules?.schedules;
 
     return (
         <>
@@ -40,10 +42,10 @@ export const Holoduler: FC = memo(() => {
             ) : (
                 <Wrap>
                     {
-                        holodules.length > 0 ? (
-                            holodules.map((holodule) => (
-                                <WrapItem key={holodule.key} mx="auto">
-                                    <StreamCard holodule={holodule} today={today} />
+                        (arr !== undefined && arr.length > 0) ? (
+                            arr.map((schedule) => (
+                                <WrapItem key={schedule.key} mx="auto">
+                                    <StreamCard schedule={schedule} today={today} />
                                 </WrapItem>
                             ))
                         ) : (

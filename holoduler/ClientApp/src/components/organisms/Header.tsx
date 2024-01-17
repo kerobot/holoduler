@@ -14,7 +14,7 @@ export const Header: FC = memo(() => {
     // 指定した日付を state に保持してページ遷移
     const navigateDate = useCallback((date: Date) => {
         setDateState(date);
-        navigate(`/${DateHelper.formatDate(date)}`);
+        navigate(`/${DateHelper.formatDate(date, "-")}`);
     }, [navigate]);
 
     // 当日に移動

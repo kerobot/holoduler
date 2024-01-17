@@ -11,6 +11,9 @@ namespace holoduler.Models
         [JsonProperty("access_token")]
         public string? AccessToken { get; private set; }
 
+        [JsonProperty("token_type")]
+        public string? TokenType { get; private set; }
+
         public Token()
         {
         }
